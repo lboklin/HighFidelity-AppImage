@@ -8,10 +8,61 @@ set -e
 # Be verbose
 #set -x
 
-# Get the path of this script
-pushd `dirname $0` > /dev/null
-PACKAGING_DIR=$(pwd)
-popd > /dev/null
+# We should now be inside CentOS 6
+grep -r "CentOS release 6" /etc/redhat-release || exit 1
+
+git_pull_rebase_helper()
+{
+	GITCLEAN=$(git diff --shortstat 2> /dev/null | tail -n1)
+	if [ "x$GITCLEAN" != "x" ] ; then
+		git stash save
+		git pull --rebase
+		git stash pop
+	else
+		git pull --rebase
+	fi
+}
+
+if [ -z "$NO_DOWNLOAD" ] ; then
+
+    yum install -y epel-release
+    yum -y install wget tar bzip2 git libtool which fuse fuse-devel automake libtool mesa-libEGL cppunit-devel cmake qt5-qtbase-gui qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qttools qt5-qttools-devel qt5-qtwebkit qt5-qtwebkit-devel qt5-qtbase-static glibc-headers libstdc++-devel gcc-c++ freetype-devel cairo-devel lcms2-devel libpng-devel libjpeg-devel libtiff-devel python-devel aspell-devel boost-devel cups-devel libxml2-devel libstdc++-devel boost-devel-static gperf libicu-devel tkinter openssl perl-core qt5-qtquickcontrols qt5-qtquick1 sudo
+
+    # Newer compiler than what comes with CentOS 6
+    #wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+    #yum -y install devtoolset-2-gcc devtoolset-2-gcc-c++ devtoolset-2-binutils
+
+    # Build AppImageKit
+    if [ ! -d AppImageKit ] 
+    then
+        git clone -b appimagetool/master --recursive https://github.com/probonopd/AppImageKit
+        cd AppImageKit/
+    else
+        cd AppImageKit/
+        git_pull_rebase_helper
+    fi
+    sudo bash -ex install-build-deps.sh
+    bash -ex build.sh
+    cd -
+fi
+
+
+if [ ! -d hifi ] ; then
+  git clone -b hifi/master --recursive https://github.com/highfidelity/hifi hifi
+fi
+cd hifi
+git_pull_rebase_helper
+mkdir build
+cd build
+cmake .. -DQT_CMAKE_PREFIX_PATH=/usr/lib64/qt5/mkspecs/features/data/cmake
+make interface
+
+ldconfig
+
+mkdir appimage
+cd appimage
+PACKAGING_DIR=`pwd`
+BUNDLE=/bundle/
 
 # What to call the resulting appimage
 APPIMAGE_NAME=HighFidelity-Interface-x86_64.AppImage
@@ -40,6 +91,7 @@ APPIMAGE_QT_PLUGINS=$APPIMAGE_QT_DIR/qt5/plugins/
 printf "\nCleansing any pre-existing files..."
 
 rm -rf $APPDIR/*
+#rm -rf $PACKAGING_DIR/out
 
 printf "Done.\n"
 
@@ -266,14 +318,17 @@ printf "Done.\n"
 
 printf "\nPackaging AppRun script, desktop file, icon, metadata, etc..."
 
-#ln -fs usr/bin/interface $APPDIR/AppRun
-cp -R $PACKAGING_DIR/bundle/{*,.directory} $APPDIR/ 
+cp -r $BUNDLE/{*,.directory} $APPDIR/ 
 
 printf "Done.\n"
 
 printf "\nCreating AppImage...\n\n"
 
-appimagetool $APPDIR $PACKAGING_DIR/$APPIMAGE_NAME || appimagetool -n $APPDIR $PACKAGING_DIR/$APPIMAGE_NAME
+mkdir -p $PACKAGING_DIR/out/
+
+appimagetool $APPDIR $PACKAGING_DIR/out/$APPIMAGE_NAME || appimagetool -n $APPDIR $PACKAGING_DIR/out/$APPIMAGE_NAME
+
+chmod a+rwx $PACKAGING_DIR/out/$APPIMAGE_NAME
 
 printf "\nAll done.\n"
 
