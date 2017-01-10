@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>io.hifi-interface.desktop</id>
+    <name>High Fidelity - Interface</name>
+    <developer_name>High Fidelity Inc.</developer_name>
+    <description>
+        <p>
+            Explore, create and host worlds with High Fidelity's open source, shared virtual reality.
+        </p>
+        <p>
+            In less time than it takes to deploy a website, everyone–makers, artists, students and enthusiasts–can launch and share interconnected virtual reality environments.
+        </p>
+        <p> Features: </p>
+        <ul>
+            <li>FULL 3D AUDIO - Low-latency, server-mixed, reverberant audio from hundreds of simultaneous sources.</li>
+            <li>LIMITLESS SCALE - Shared user-contributed computing power to host huge audiences.</li>
+            <li>MANY DEVICES and INPUTS - Support for the HTC Vive, Oculus Rift, Hydra PrioVR, Leap Motion and many others.</li>
+            <li>OPEN SOURCE - Apache license client and server.</li>
+            <li>FACIAL FEATURE AWARE - Sensor-based capture of gaze, facial expressions, and body language.</li>
+            <li>SCRIPTABLE API - Robust Javascript library for developing interactive experiences.</li>
+            <li>CONTENT SCALABILITY - Dynamic assignment of multiple nested levels of detail using sparse voxel octree structure.</li>
+            <li>DOMAIN OWNERSHIP - Registerable/searchable unique domain and location names.</li>
+        </ul>
+    </description>
+    <metadata_license>CC0</metadata_license>
+    <project_license>Apache License version 2.0</project_license>
+    <url type="bugtracker">https://github.com/highfidelity/hifi/issues</url>
+    <url type="faq">https://forums.highfidelity.com/</url>
+    <url type="help">http://docs.highfidelity.io/</url>
+    <url type="homepage">https://highfidelity.com/</url>
+    <screenshots>
+        <screenshot type="default">
+            <caption>Screenshot</caption>
+            <image height="400" width="576">https://highfidelity.com/assets/main/market/hifi-screen-13-w-e911597fcad3ddcfa15cf840374596e31a87012ab0f2ebe2c08d2850e7925d62.jpg</image>
+        </screenshot>
+        <screenshot>
+            <caption>Another screenshot</caption>
+            <image height="400" width="448">https://highfidelity.com/assets/main/market/hifi-screen-17-b37c47ad361662f6b1c9239b5695e86b002b8856d128d5350c8e0e4cb411c054.jpg</image>
+        </screenshot>
+    </screenshots>
+    <releases>
+        <release version="git-tag_RELEASE-5782" date="2016-12-09">
+            <description>
+                <p>Latest known working build for Linux</p>
+            </description>
+        </release>
+    </releases>
+</component>

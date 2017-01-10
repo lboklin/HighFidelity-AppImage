@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=High Fidelity - Interface
+Type=Application
+Comment=Virtual Reality Platform
+Exec=interface %F
+Icon=icon
+Categories=Game;
