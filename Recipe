@@ -267,7 +267,7 @@ printf "Done.\n"
 printf "\nPackaging AppRun script, desktop file, icon, metadata, etc..."
 
 #ln -fs usr/bin/interface $APPDIR/AppRun
-cp -R $PACKAGING_DIR/bundle/{*,.directory} $APPDIR/ 
+cp -r $PACKAGING_DIR/bundle/{*,.directory} $APPDIR/ 
 
 printf "Done.\n"
 
